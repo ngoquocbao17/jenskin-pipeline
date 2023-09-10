@@ -5,7 +5,25 @@ pipeline {
       jdk 'jdk8' 
     }
     stages {
-        
+        stage('Unit and Integration Tests') {
+            steps {
+                sh 'mvn test'
+            }
+            post {
+                success {
+                    emailext subject: 'Unit and Integration Tests Success',
+                              body: 'The unit and integration tests have succeeded. Find attached logs for more information.',
+                              to: 'ngoquocbao17@gmail.com',
+                              attachLog: true
+                }
+                failure {
+                    emailext subject: 'Unit and Integration Tests Failed',
+                              body: 'The unit and integration tests have failed. Find attached logs for more information.',
+                              to: 'ngoquocbao17@gmail.com',
+                              attachLog: true
+                }
+            }
+        }
         stage('Code Analysis') {
             steps {
                 // Integrate a code analysis tool using Checkstyle
