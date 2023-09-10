@@ -1,68 +1,89 @@
 pipeline {
     agent any
-
     stages {
         stage('Build') {
             steps {
-                // Use Maven to build the code
                 sh 'mvn clean package'
             }
         }
-
         stage('Unit and Integration Tests') {
             steps {
-                // Use JUnit and Selenium to run unit and integration tests
                 sh 'mvn test'
             }
-        }
-
-        stage('Code Analysis') {
-            steps {
-                // Use SonarQube to analyze the code
-                withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar'
+            post {
+                success {
+                    mail to: 'ngoquocbao17@gmail.com',
+                         subject: 'Unit and Integration Tests Success',
+                         body: 'The unit and integration tests have succeeded. Find attached logs for more information.',
+                         attachLog: true
+                }
+                failure {
+                    mail to: 'ngoquocbao17@gmail.com',
+                         subject: 'Unit and Integration Tests Failed',
+                         body: 'The unit and integration tests have failed. Find attached logs for more information.',
+                         attachLog: true
                 }
             }
         }
-
-        stage('Security Scan') {
+        stage('Code Analysis') {
             steps {
-                // Use OWASP ZAP to scan the code for vulnerabilities
-                sh 'zap-baseline.py -t http://localhost:8080 -r security-report.html'
-                archiveArtifacts 'security-report.html'
+                // Integrate a code analysis tool using Checkstyle
+                checkstyle canRunOnFailed: true, defaultEncoding: 'UTF-8', pattern: '**/*.java'
             }
         }
-
+        stage('Security Scan') {
+            steps {
+                // Use OWASP ZAP for security scan
+                sh 'zap-baseline.py -t http://localhost:8080 -r security-report.html'
+                archiveArtifacts 'security-report.html'            }
+            post {
+                success {
+                    mail to: 'ngoquocbao17@gmail.com',
+                         subject: 'Scurity Scan Success',
+                         body: 'The Scurity Scan has succeeded. Find attached logs for more information.',
+                         attachLog: true
+                }
+                failure {
+                    mail to: 'ngoquocbao17@gmail.com',
+                         subject: 'Scurity Scan Failed',
+                         body: 'The Scurity Scan has failed. Find attached logs for more information.',
+                         attachLog: true
+                }
+            }
+        }
         stage('Deploy to Staging') {
             steps {
-                // Use SSH to deploy the application to a staging server
+                // Use SSH to deploy to staging 
                 sshagent(['my-ssh-credentials']) {
                     sh 'ssh user@staging-server "cd /path/to/application && ./deploy.sh"'
                 }
             }
         }
-
         stage('Integration Tests on Staging') {
             steps {
-                // Use JUnit and Selenium to run integration tests on the staging environment
                 sh 'mvn test'
             }
-        }
-
-        stage('Deploy to Production') {
-            steps {
-                // Use SSH to deploy the application to a production server
-                sshagent(['my-ssh-credentials']) {
-                    sh 'ssh user@production-server "cd /path/to/application && ./deploy.sh"'
+            post {
+                success {
+                    mail to: 'ngoquocbao17@gmail.com',
+                         subject: 'Integration Tests on Staging Success',
+                         body: 'The Integration Tests on Staging have succeeded. Find attached logs for more information.',
+                         attachLog: true
+                }
+                failure {
+                    mail to: 'ngoquocbao17@gmail.com',
+                         subject: 'Integration Tests on Staging Failed',
+                         body: 'The Integration Tests on Staging have failed. Find attached logs for more information.',
+                         attachLog: true
                 }
             }
         }
-    }
-
-    post {
-        always {
-            // Send notification email with logs as attachment
-            emailext attachLog: true, body: 'Pipeline finished', subject: 'Pipeline status: ${currentBuild.currentResult}', to: 'email@example.com'
+        stage('Deploy to Production') {
+            steps {
+                // Use SSH deploy to production 
+                sshagent(['my-ssh-credentials']) {
+                    sh 'ssh user@production-server "cd /path/to/application && ./deploy.sh"'
+            }
         }
     }
 }
