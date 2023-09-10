@@ -5,9 +5,6 @@ pipeline {
       jdk 'jdk8' 
     }
     stages {
-        stage('Build') {
-        // nothing
-        }
         stage('Unit and Integration Tests') {
             steps {
                 sh 'mvn test'
