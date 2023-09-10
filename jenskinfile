@@ -6,9 +6,7 @@ pipeline {
     }
     stages {
         stage('Build') {
-            steps {
-            //
-            }
+        // nothing
         }
         stage('Unit and Integration Tests') {
             steps {
