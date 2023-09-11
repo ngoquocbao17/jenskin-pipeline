@@ -20,15 +20,14 @@ pipeline {
             }
             post {
                 success {
-                            mail to: 'ngoquocbao17@gmail.com',
-                             subject: 'Unit and Integration Tests Success',
-                              body: 'The unit and integration tests have succeeded. Find attached logs for more information.'
+                    mail to: 'ngoquocbao17@gmail.com',
+                        subject: 'Unit and Integration Tests Success',
+                        body: 'The unit and integration tests have succeeded. Find attached logs for more information.'
                 }
                 failure {
-                    emailext subject: 'Unit and Integration Tests Failed',
-                              body: 'The unit and integration tests have failed. Find attached logs for more information.',
-                              to: 'ngoquocbao17@gmail.com',
-                              attachLog: true
+                    mail to: 'ngoquocbao17@gmail.com',
+                        subject: 'Unit and Integration Tests Failed',
+                        body: 'The unit and integration tests have failed. Find attached logs for more information.'
                 }
             }
         }
@@ -45,16 +44,14 @@ pipeline {
             }
             post {
                 success {
-                    emailext subject: 'Security Scan Success',
-                              body: 'The Security Scan has succeeded. Find attached logs for more information.',
-                              to: 'ngoquocbao17@gmail.com',
-                              attachLog: true
+                    mail to: 'ngoquocbao17@gmail.com',
+                        subject: 'Security Scan Success',
+                        body: 'The Security Scan has succeeded. Find attached logs for more information.'
                 }
                 failure {
-                    emailext subject: 'Security Scan Failed',
-                              body: 'The Security Scan has failed. Find attached logs for more information.',
-                              to: 'ngoquocbao17@gmail.com',
-                              attachLog: true
+                    mail to: 'ngoquocbao17@gmail.com',
+                        subject: 'Security Scan Failed',
+                        body: 'The Security Scan has failed. Find attached logs for more information.'
                 }
             }
         }
@@ -71,16 +68,14 @@ pipeline {
             }
             post {
                 success {
-                    emailext subject: 'Integration Tests on Staging Success',
-                              body: 'The Integration Tests on Staging have succeeded. Find attached logs for more information.',
-                              to: 'ngoquocbao17@gmail.com',
-                              attachLog: true
+                    mail to: 'ngoquocbao17@gmail.com',
+                        subject: 'Integration Tests on Staging Success',
+                        body: 'The Integration Tests on Staging have succeeded. Find attached logs for more information.'
                 }
                 failure {
-                    emailext subject: 'Integration Tests on Staging Failed',
-                              body: 'The Integration Tests on Staging have failed. Find attached logs for more information.',
-                              to: 'ngoquocbao17@gmail.com',
-                              attachLog: true
+                    mail to: 'ngoquocbao17@gmail.com',
+                        subject: 'Integration Tests on Staging Failed',
+                        body: 'The Integration Tests on Staging have failed. Find attached logs for more information.'
                 }
             }
         }
