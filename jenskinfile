@@ -1,17 +1,17 @@
 pipeline {
     agent any
     tools { 
-      maven 'Maven 3.9.4' 
-      jdk 'jdk8' 
+        maven 'Maven 3.9.4' 
+        jdk 'jdk8' 
     }
     stages {
         stage('Build') {
-                // Use mvn clean package
-                steps {
-                    echo "Fetching the source code from Github"
-                    echo "Compiling the code and generating artifacts"
-                }
+            // Use mvn clean package
+            steps {
+                echo "Fetching the source code from Github"
+                echo "Compiling the code and generating artifacts"
             }
+        }
         stage('Unit and Integration Tests') {
             // use mvn test
             steps {
@@ -43,7 +43,7 @@ pipeline {
             // Use OWASP ZAP for security scan
             steps {
                 echo "Running Security Scan started and completed"
-                }
+            }
             post {
                 success {
                     emailext subject: 'Security Scan Success',
@@ -63,7 +63,6 @@ pipeline {
             // Use SSH to deploy to staging
             steps {
                 echo "Running Deploy to Staging started and completed"
-                }
             }
         }
         stage('Integration Tests on Staging') {
@@ -90,7 +89,7 @@ pipeline {
             steps {
                 // Use SSH deploy to production 
                 echo "Running Integration Tests on Staging started and completed"
-                }
             }
         }
+    }
 }
